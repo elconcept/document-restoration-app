@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: document-restorer-backend:local
+    container_name: document-restorer-backend
+    user: "1029:100"
+    environment:
+      TZ: Europe/Warsaw
+      HOME: /tmp
+      CORS_ORIGINS: "http://10.0.10.201:8431"
+    volumes:
+      - /volume2/docker/document-restorer/data:/data
+    ports:
+      - "8430:8000"
+    network_mode: bridge
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: "http://10.0.10.201:8430"
+    image: document-restorer-frontend:local
+    container_name: document-restorer-frontend
+    ports:
+      - "8431:80"
+    network_mode: bridge
+    restart: unless-stopped
