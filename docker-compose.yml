@@ -14,7 +14,8 @@ services:
       - /volume2/docker/document-restorer/data:/data
     ports:
       - "8430:8000"
-    network_mode: bridge
+    networks:
+      - apps_local
     restart: unless-stopped
 
   frontend:
@@ -26,5 +27,10 @@ services:
     container_name: document-restorer-frontend
     ports:
       - "8431:80"
-    network_mode: bridge
+    networks:
+      - apps_local
     restart: unless-stopped
+
+networks:
+  apps_local:
+    external: true   # 172.16.20.128/28, utworzona na NAS
